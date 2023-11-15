@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: juice-shop-dockerhub
+  labels:
+    app: juice-shop-dockerhub
+spec:
+  selector:
+    matchLabels:
+      app: juice-shop-dockerhub
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: juice-shop-dockerhub
+    spec:
+      containers:
+      - name: juice-shop-dockerhub
+        image: freshdemo/juice-shop-dockerhub-gke:main
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 3000
+        securityContext:
+          privileged: true
+
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: juice-shop-dockerhub
+  name: juice-shop-dockerhub
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 8082
+      protocol: TCP
+      targetPort: 3000
+  selector:
+    app: juice-shop-dockerhub
