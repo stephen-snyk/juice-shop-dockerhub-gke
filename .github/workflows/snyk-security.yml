@@ -26,7 +26,6 @@ jobs:
       - run: npm install
       - run: npm i -g snyk
       - run: snyk auth ${{ secrets.SNYK_TOKEN }}
-      - run: snyk test
 
       - name: install snyk-to-html
         run: |
