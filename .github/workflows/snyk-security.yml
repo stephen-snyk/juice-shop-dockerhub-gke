@@ -30,10 +30,17 @@ jobs:
       - name: install snyk-to-html
         run: |
           npm install snyk-to-html -g
+
       - name: Snyk Open Source # For testing and failing please add snyk test before snyk monitor
         run: |
           snyk test --json | snyk-to-html -o results-opensource.html || true
           
+      - name: Use the Upload Artifact GitHub Action
+        uses: actions/upload-artifact@v3
+        with:
+          name: results-opensource
+          path: results-opensource.html
+
       - name: Snyk Code # Remove || true to fail if there are vulnerabilities
         run: |
           snyk code test --json | snyk-to-html -o results-code.html || true
@@ -41,8 +48,6 @@ jobs:
       - name: Use the Upload Artifact GitHub Action
         uses: actions/upload-artifact@v3
         with:
-	  name: results-opensource
-	  path: results-opensource.html
           name: results-code
           path: results-code.html
       
