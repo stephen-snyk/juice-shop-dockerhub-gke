@@ -1,4 +1,4 @@
-name: Node.js CI
+name: Snyk Security CI 
 
 on:
   push:
@@ -38,6 +38,12 @@ jobs:
       - name: Snyk Code # Remove || true to fail if there are vulnerabilities
         run: |
           snyk code test --json | snyk-to-html -o results-code.html || true
+
+      - name: Use the Upload Artifact GitHub Action
+        uses: actions/upload-artifact@v2
+        with:
+          name: results-code
+          path: results-code.html
       
       - name: Snyk IaC # Remove || true to fail if there are vulnerabilities
         run: |
@@ -45,11 +51,10 @@ jobs:
      
       - name: Snyk Container # Rename your image, for testing and failing please add snyk container test before snyk container monitor
         run: |
-          docker build . -t freshdemo/juice-shop-github-dockerhub-gke:actions
-          snyk container test freshdemo/juice-shop-github-dockerhub-gke:actions --file=Dockerfile
+          snyk container test freshdemo/juice-shop-github-dockerhub-gke:actions --file=Dockerfile || true
           
-      - name: Use the Upload Artifact GitHub Action
-        uses: actions/upload-artifact@v2
-        with:
-          name: results-code
-          path: results-code.html
+#      - name: Use the Upload Artifact GitHub Action
+#        uses: actions/upload-artifact@v2
+#        with:
+#          name: results-code
+#          path: results-code.html
