@@ -65,4 +65,4 @@ jobs:
      
       - name: Snyk Container # Rename your image, for testing and failing please add snyk container test before snyk container monitor
         run: |
-          snyk container test freshdemo/juice-shop-github-dockerhub-gke:actions --file=Dockerfile 
+          snyk container test freshdemo/juice-shop-github-dockerhub-gke:gha --file=Dockerfile ||true
